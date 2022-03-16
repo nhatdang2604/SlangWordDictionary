@@ -24,5 +24,8 @@ public class SlangWord {
 	public void setWord(String word) {this.word = word;}
 	public void setDefinition(String definition) {this.definition = definition;}
 
-	
+	@Override
+	public SlangWord clone() {
+		return new SlangWord(this.word, this.definition);
+	}
 }
