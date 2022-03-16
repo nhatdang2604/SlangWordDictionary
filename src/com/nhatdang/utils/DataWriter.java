@@ -12,7 +12,7 @@ import com.nhatdang.entity.SlangWord;
 public class DataWriter {
 
 	//Write a dictionary of slang word into a file which has the given path
-	public int writeStudentsToCSV(Map<String, SlangWord> dictionary, String path) { 
+	public int writeSlangWordsToCSV(Map<String, SlangWord> dictionary, String path) { 
 	
 		//Error code
 		int errorCode = 0;

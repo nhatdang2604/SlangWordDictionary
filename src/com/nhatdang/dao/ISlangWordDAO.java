@@ -15,8 +15,9 @@ public interface ISlangWordDAO {
 	//Get all slang words
 	public Map<String, SlangWord> getAllSlangWords();
 	
-	//Get the default slang words
-	public Map<String, SlangWord> getDefaultSlangWords();
+	//reset the default slang words
+	//	Return 0 if success
+	public int resetToDefaultSlangWords();
 	
 	//Find the slang word, by the given target, specify by type..
 	//	type == 0: target = word of the slang word
@@ -27,19 +28,28 @@ public interface ISlangWordDAO {
 	public List<SlangWord> showHistory();
 	
 	//Create new slang word
-	// Return 0 if success
+	//	Return 0 if add successfully
+	//	Return 1 if the slang word is null
+	//	Return 2 if the slang word already define
 	public int addSlangWord(SlangWord newSlangWord);
 	
 	//Update existed slang word
-	// Return 0 if success
+	//	Return 0 if update successfully
+	//	Return 1 if the slang word is null
+	//	Return 2 if the slang word isn't defined, else return 0
 	public int updateSlangWord(SlangWord slangWord);
 	
 	//Delete existed slang word with the given word
-	// Return 0 if success
+	//	Return 0 if the delete successfully
+	//	Return 1 if the word is null
+	//	Return 2 if the slang word with the given word isn't defined
 	public int deleteSlangWord(String word);
 	
-	//Randomize 'size' slang words
-	public List<SlangWord> randomSlangWords(int size);
+	//	Randomize 'size' slang words and make answer to create quiz
+	//	The function has 2 output
+	//		1.) The return result: list of the 'size' slang words
+	//		2.) answerIndex: the correct answer index in the list
+	public List<SlangWord> randomSlangWordsToMakeQuiz(int size, int answerIndex);
 	
 	//Write the current cache into workspace file
 	//	Return 0 if success

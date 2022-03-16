@@ -4,14 +4,20 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import com.nhatdang.config.FileConfig;
 import com.nhatdang.config.IConfig;
 import com.nhatdang.entity.SlangWord;
+import com.nhatdang.utils.DataWriter;
 import com.nhatdang.utils.Parser;
 
 //Data access object for all the slang word method
-public class SlangWordDAO implements ISlangWordDAO {
+//Using enum for singleton pattern
+public enum SlangWordDAO implements ISlangWordDAO {
+	
+	//Instance for the singleton pattern
+	INSTANCE;
 	
 	//Configurations
 	private IConfig fileConfig;
@@ -20,17 +26,19 @@ public class SlangWordDAO implements ISlangWordDAO {
 	private Map<String, SlangWord> cache;
 	
 	//Cache for the default data
-	private Map<String, SlangWord> historyCache;
+	private List<SlangWord> historyCache;
+	
+	//Random number generator for creating quiz
+	private Random rng;
 	
 	//Using singleton pattern
-	private static SlangWordDAO instance = new SlangWordDAO();
-	public static SlangWordDAO getInstance() {return instance; }
 	private SlangWordDAO() {
 		
 		//Construct properties
 		cache = new HashMap<>();
-		historyCache = new HashMap<>();
-		fileConfig = FileConfig.getInstance();
+		historyCache = new ArrayList<>();
+		fileConfig = FileConfig.INSTANCE;
+		rng = new Random();
 		
 		//Initialize properties
 		initComponents();
@@ -41,17 +49,48 @@ public class SlangWordDAO implements ISlangWordDAO {
 	// Return 0 if success
 	private int initComponents() {
 		
+		//Load the cache from the data.txt when startup
 		cache = getAllSlangWords();
-		//historyCache = getDefaultSlangWords();
+		
+		return 0;
+	}
+	
+	//Utilities for code reuseable
+	private Map<String, SlangWord> readDataFromFile(String path) {
+		
+		//Parser to read data from default.txt
+		Parser parser = new Parser();
+		
+		//Read the data from the given file
+		cache = parser.readSlangWordFromText(path);
+		
+		return cache;
+	}
+	
+	//Utilities for add found slang words into history cache
+	//	Return 0 when success
+	private int addToHistory(SlangWord slangWord) {
+		
+		//If slang word == null => do nothing and return error code
+		if (null == slangWord) {
+			return 1;
+		}
+		
+		//add found slang word into cache
+		historyCache.add(slangWord);
 		
 		return 0;
 	}
 	
 	//Get the default slang word
-	//	Only for construction
+	//	Return 0 if success
 	@Override
-	public Map<String, SlangWord> getDefaultSlangWords() {
-		return null;
+	public int resetToDefaultSlangWords() {
+		
+		//Read the data from the default.txt
+		readDataFromFile(((FileConfig)fileConfig).getDefaultDataFile());
+		
+		return 0;
 	}
 	
 	//Get all slang words
@@ -62,14 +101,8 @@ public class SlangWordDAO implements ISlangWordDAO {
 		//	cache != null && cache is not empty
 		if (!(null == cache || cache.isEmpty())) return cache;
 		
-		//Parser to read data from file
-		Parser parser = new Parser();
-		
-		//Read the data from the workspace data file
-		cache = parser.readSlangWordFromText(((FileConfig)fileConfig).getWorkspaceDataFile());
-		
-		//Return the new update cache
-		return cache;
+		//Read the data from the data.txt
+		return readDataFromFile(((FileConfig)fileConfig).getWorkspaceDataFile());
 	}
 		
 	//Find the slang word, by the given target, specify by type..
@@ -85,19 +118,29 @@ public class SlangWordDAO implements ISlangWordDAO {
 		if (type.equals(FindType.FIND_BY_WORD)) {
 			
 			//Only find the first result
-			String word = target;
-			result.add(cache.get(word));
+			String word = target.trim();
+			SlangWord foundSlangWord = cache.get(word);
+			
+			//Add to history and add to the result if search hit
+			if (null != foundSlangWord) {
+				addToHistory(foundSlangWord);
+				result.add(foundSlangWord);
+			}
 		} 
 		else if (type.equals(FindType.FIND_BY_KEYWORD)) {
 			
 			//Find the slang word by the keyword
-			String keyword = target;
+			String keyword = target.trim();
 			cache.forEach((word, slangWord) -> {
 				if (slangWord.getDefinition().contains(keyword)) {
 					result.add(slangWord);
 				}
 			});
 			
+			//Add the found slangwords into cache
+			result.forEach(slangWord ->  {
+				addToHistory(slangWord);
+			});
 		}
 		
 		return result;
@@ -106,34 +149,87 @@ public class SlangWordDAO implements ISlangWordDAO {
 	//Show the history of finding slang word
 	@Override
 	public List<SlangWord> showHistory(){
-		return null;
+		return historyCache;
 	}
 		
 	//Create new slang word
-	// Return 0 if success
+	//	Return 0 if add successfully
+	//	Return 1 if the slang word is null
+	//	Return 2 if the slang word already define
 	@Override
 	public int addSlangWord(SlangWord newSlangWord) {
-		return 0;
+		
+		//Return 0 if add successfully
+		//Return 1 if the slang word is null
+		//Return 2 if the slang word already define
+		int errorCode = (null == newSlangWord?1:
+						(cache.containsKey(newSlangWord.getWord())?2:0));
+
+		
+		//Add the new slang word into dictionary
+		cache.put(newSlangWord.getWord(), newSlangWord);
+		
+		return errorCode;
 	}
 		
 	//Update existed slang word
-	// Return 0 if success
+	//	Return 0 if update successfully
+	//	Return 1 if the slang word is null
+	//	Return 2 if the slang word isn't defined, else return 0
 	@Override
 	public int updateSlangWord(SlangWord slangWord) {
-		return 0;
+		
+		//Return 0 if update successfully
+		//Return 1 if the slang word is null
+		//Return 2 if the slang word isn't defined, else return 0
+		int errorCode = (null == slangWord?1:
+						(null == cache.replace(slangWord.getWord(), slangWord)?2:0));
+		
+		return errorCode;
 	}
 		
 	//Delete existed slang word with the given word
-	// Return 0 if success
+	//	Return 0 if the delete successfully
+	//	Return 1 if the word is null
+	//	Return 2 if the slang word with the given word isn't defined
 	@Override
 	public int deleteSlangWord(String word) {
-		return 0;
+		
+		//Return 0 if the delete successfully
+		//Return 1 if the word is null
+		//Return 2 if the slang word with the given word isn't defined
+		int errorCode = (null == word?1:
+						(null == cache.remove(word)?2:0));
+				
+		return errorCode;
 	}
 		
-	//Randomize 'size' slang words
+	//	Randomize 'size' slang words and make answer to create quiz
+	//	The function has 2 output
+	//		1.) The return result: list of the 'size' slang words
+	//		2.) answerIndex: the correct answer index in the list
 	@Override
-	public List<SlangWord> randomSlangWords(int size) {
-		return null;
+	public List<SlangWord> randomSlangWordsToMakeQuiz(int size, int resultIndex) {
+		
+		//Return null if there are not enough slang word in dictionary
+		if (cache.size() < size) return null;
+		
+		//The target 
+		ArrayList<SlangWord> result = new ArrayList<>();
+	
+		//Buffer for all value in the dictionary
+		ArrayList<SlangWord> buffer = (ArrayList<SlangWord>) cache.values();
+		
+		//Start randomize
+		for (int i = 0; i < size; ++i) {
+			int index = rng.nextInt(size);	//index of the lucky slang word
+			result.add(buffer.get(index));	//add the lucky slang word into result
+		}
+		
+		//Make the correct answer
+		resultIndex = rng.nextInt(size);
+		
+		return result;
 	}
 	
 	//Write the current cache into workspace file
@@ -141,7 +237,15 @@ public class SlangWordDAO implements ISlangWordDAO {
 	//When to use: when exit program
 	@Override
 	public int commitDataToCurrentFile() {
-		return 0;
+		
+		//Writer to write into file
+		DataWriter writer = new DataWriter();
+		
+		//Write data from cache into the data.txt
+		int errorCode = writer.writeSlangWordsToCSV(cache, 
+				((FileConfig)fileConfig).getWorkspaceDataFile());
+		
+		return errorCode;
 	}
 
 }
