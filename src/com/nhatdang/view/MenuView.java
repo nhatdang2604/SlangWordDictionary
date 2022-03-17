@@ -30,7 +30,8 @@ public enum MenuView implements IView {
 					"7. Reset data to default",
 					"8. Random a slang word", 
 					"9. Quiz: Given a word",
-					"10. Quiz: Given a definition"));
+					"10. Quiz: Given a definition",
+					"11. Exit"));
 	
 	
 	//Store the selected option in menu
@@ -43,17 +44,17 @@ public enum MenuView implements IView {
 	private MenuView() {
 		menuValidator = new DataValidator();
 	}
-			
+	
+	//Show the header of menu
 	private void showHeaderMenu() {
 		
 		//Print header
 		System.out.println(SEPERATOR + "\n");
 		System.out.println(TITLE);
 		System.out.println("\n" + SEPERATOR + "\n");
-		
-		
 	}
 	
+	//Show the body of the menu
 	private void showBodyMenu() {
 		
 		//Print all the option into main menu
@@ -62,6 +63,7 @@ public enum MenuView implements IView {
 		});
 	}
 	
+	//Show the footer of the menu
 	private void showFooterMenu() {
 		
 		//Print footer
@@ -71,15 +73,25 @@ public enum MenuView implements IView {
 
 	}
 	
-	private void reloadPlainMenu() {
-		
-		//Re-popup all the menu text
-		clearScreen();
+	//Show the plain text of menu by:
+	//	1.) Show header
+	//	2.) Show body
+	//	3.) Show footer
+	private void showPlainMenu() {
 		showHeaderMenu();
 		showBodyMenu();
 		showFooterMenu();
 	}
 	
+	//Clear screen and show the plain text of menu
+	private void reloadPlainMenu() {
+		
+		//Re-popup all the menu text
+		clearScreen();
+		showPlainMenu();
+	}
+	
+	//Read the user input from console
 	private int readSelectedOption() {
 		
 		//For reading buffer
@@ -103,7 +115,7 @@ public enum MenuView implements IView {
 			//Check if the input is number
 			if (dataValidator.isInteger(buffer)) {
 				
-				//Check if the input is out of range
+				//Check if the input is out of range [1; optionSize]
 				if (dataValidator.isIntegerOutOfRange(buffer, 1, optionSize)) {
 					
 					//Save the selected correct format option
@@ -128,10 +140,8 @@ public enum MenuView implements IView {
 	@Override
 	public void showExecute() {
 		
-		//Load the menu text
-		showHeaderMenu();
-		showBodyMenu();
-		showFooterMenu();
+		//show the menu text
+		showPlainMenu();
 		
 		//Read the data from user
 		selectedOption = readSelectedOption();
