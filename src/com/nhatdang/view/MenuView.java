@@ -9,7 +9,7 @@ import com.nhatdang.validator.DataValidator;
 import com.nhatdang.validator.IValidator;
 
 //Using enum for singleton pattern
-public enum MainMenu implements IView {
+public enum MenuView implements IView {
 
 	//Instance for singleton pattern
 	INSTANCE;
@@ -40,7 +40,7 @@ public enum MainMenu implements IView {
 	private IValidator menuValidator;
 	
 	//Using Singleton Pattern
-	private MainMenu() {
+	private MenuView() {
 		menuValidator = new DataValidator();
 	}
 			
