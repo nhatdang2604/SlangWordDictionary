@@ -120,18 +120,19 @@ public enum MenuView implements IView {
 					
 					//Save the selected correct format option
 					option = Integer.parseInt(buffer);
+					
+					//Break out the loop if the format is correct
 					break;
 				}
 			}
 			
-			//Clear screen and reload the menu, keep input
+			//Clear screen and reload the menu, 
+			//	keep input until there are no input format error
 			reloadPlainMenu();
 		}
 		
 		return option;
 	}
-	
-	
 	
 	//Getter
 	public List<String> getOptions() {return options;}
