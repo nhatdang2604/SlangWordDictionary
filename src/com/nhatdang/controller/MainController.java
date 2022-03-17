@@ -4,9 +4,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.nhatdang.dao.ISlangWordDAO.FindType;
+import com.nhatdang.entity.SlangWord;
 import com.nhatdang.service.ISlangWordService;
 import com.nhatdang.service.SlangWordService;
 import com.nhatdang.view.ExitView;
+import com.nhatdang.view.FindView;
 import com.nhatdang.view.IView;
 import com.nhatdang.view.MenuView;
 
@@ -33,7 +36,8 @@ public enum MainController implements IController {
 		views = new ArrayList<>(
 				Arrays.asList(
 						new MenuView(),
-						//new something
+						new FindView(FindType.FIND_BY_WORD),
+						new FindView(FindType.FIND_BY_KEYWORD),
 						new ExitView()));
 		
 		//Setup the index
@@ -56,6 +60,50 @@ public enum MainController implements IController {
 		
 		//Return selected option from main menu
 		return menu.getSelectedOption();
+	}
+	
+	//Execute for find slang word feature
+	//	Return the index of main menu after execute
+	private int executeFindView(FindType findType) {
+		
+		//Load the find view
+		FindView findView = (FindView) views.get(currentViewId);
+		
+		
+		//Loop until errorCode == IView.BACK_CODE
+		while(true) {
+			
+			//Show the form to input the word/keyword
+			int errorCode = findView.getFindForm().show();
+			
+			//Break out the loop condition
+			if (IView.BACK_CODE == errorCode) {
+				break;
+			}
+			
+			//Get the key from the input
+			String key = (String)findView.getFindForm().getModel();
+			
+			//The result slang word list
+			List<SlangWord> result = null;
+			
+			//Using service to get the slang word list with the given key
+			if (null != key) {
+				if(findType.equals(FindType.FIND_BY_WORD)) {
+					result = slangWordService.findByWord(key);
+				} else if (findType.equals(FindType.FIND_BY_KEYWORD)) {
+					result = slangWordService.findByKeyword(key);
+				}
+			}
+			
+			//Set the found slang word and show them into screen
+			findView.setAnswers(result).show();
+		}
+		
+		
+		//After using find feature (mean using $back feature to come out),
+		//	return to main menu
+		return MAIN_MENU_INDEX;
 	}
 	
 	//Execute before closing the app
@@ -85,6 +133,8 @@ public enum MainController implements IController {
 		while (true) {
 			
 			if (MAIN_MENU_INDEX == currentViewId) {currentViewId = executeMenuView();}
+			else if (1 == currentViewId) {currentViewId = executeFindView(FindType.FIND_BY_WORD);}
+			else if (2 == currentViewId) {currentViewId = executeFindView(FindType.FIND_BY_KEYWORD);}
 			else if (EXIT_INDEX == currentViewId) {currentViewId = executeExitView(); break;}	//break if exit option is choosen
 			
 		}

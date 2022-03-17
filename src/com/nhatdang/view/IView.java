@@ -2,6 +2,10 @@ package com.nhatdang.view;
 
 public interface IView {
 
+	//Code for returning in show() and showExecute()
+	public static final int NO_ERROR_CODE = 0;
+	public static final int BACK_CODE = 1;
+	
 	//Clear the console screen
 	default void clearScreen() {
 		try {
@@ -24,7 +28,7 @@ public interface IView {
 	default public int showExecute() {
 		//do nothing
 		
-		return 0;
+		return NO_ERROR_CODE;
 	}
 	
 	//API for showing a view

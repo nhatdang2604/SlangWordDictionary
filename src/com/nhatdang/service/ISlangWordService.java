@@ -7,7 +7,7 @@ import com.nhatdang.entity.SlangWord;
 public interface ISlangWordService {
 	
 	//Find slang word by the given word
-	public SlangWord findByWord(String word);
+	public List<SlangWord> findByWord(String word);
 	
 	//Find slang word which its defination has the keyword
 	public List<SlangWord> findByKeyword(String keyword);

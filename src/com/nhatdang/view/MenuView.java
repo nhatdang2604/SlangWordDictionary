@@ -145,8 +145,8 @@ public class MenuView implements IView {
 		selectedOption = readSelectedOption();
 	
 		//Main menu doesn't have "back" feature 
-		//	=> always return 0;
-		return 0;
+		//	=> always return NO_ERROR_CODE;
+		return NO_ERROR_CODE;
 	}
 	
 }

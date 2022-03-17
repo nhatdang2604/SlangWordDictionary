@@ -27,14 +27,14 @@ public enum SlangWordService implements ISlangWordService {
 	//Find slang word by the given word
 	//	Return null if there are no search hit
 	@Override
-	public SlangWord findByWord(String word) {
+	public List<SlangWord> findByWord(String word) {
 		
 		//Get the result list
 		List<SlangWord> result = 
 				slangWordDAO.findSlangWord(word, ISlangWordDAO.FindType.FIND_BY_WORD);
 		
 		//Return null if there are no result, else return the result
-		return (result.isEmpty()?null:result.get(0));
+		return (result.isEmpty()?null:result);
 	}
 	
 	//Find slang word which its defination has the keyword

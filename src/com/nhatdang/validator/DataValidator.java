@@ -8,6 +8,10 @@ import com.nhatdang.view.WarningView;
 
 public class DataValidator implements IValidator {
 	
+
+	//The back symbol: for input to back to previous view
+	public static final String BACK_SYMBOL = "$back";	
+	
 	//View for popup error
 	private WarningView warningView;
 	
@@ -48,6 +52,11 @@ public class DataValidator implements IValidator {
 		}
 		
 		return true;
+	}
+	
+	//Validate if the buffer is BACK_SYMBOL
+	public boolean isBackPressed(String buffer) {
+		return buffer.equals(BACK_SYMBOL);
 	}
 	
 }

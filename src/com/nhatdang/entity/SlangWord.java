@@ -16,11 +16,11 @@ public class SlangWord {
 		this.definition = definition;
 	}
 
-	//Getter
+	//Getters
 	public String getWord() {return word;}
 	public String getDefinition() {return definition;}
 	
-	//Setter
+	//Setters
 	public void setWord(String word) {this.word = word;}
 	public void setDefinition(String definition) {this.definition = definition;}
 
@@ -28,4 +28,10 @@ public class SlangWord {
 	public SlangWord clone() {
 		return new SlangWord(this.word, this.definition);
 	}
+
+	@Override
+	public String toString() {
+		return "SlangWord [word = " + word + ", definition = " + definition + "]"; 
+	}	
+	
 }

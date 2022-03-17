@@ -37,7 +37,8 @@ public class WarningView implements IView {
 		Scanner scanner = new Scanner(System.in);
 		scanner.nextLine();
 		
-		return 0;
+		//Just need to hit enter => never make error
+		return NO_ERROR_CODE;
 	}
 	
 }
