@@ -139,13 +139,17 @@ public enum MenuView implements IView {
 	public int getSelectedOption() {return selectedOption;}
 	
 	@Override
-	public void showExecute() {
+	public int showExecute() {
 		
 		//show the menu text
 		showPlainMenu();
 		
 		//Read the data from user
 		selectedOption = readSelectedOption();
+	
+		//Main menu doesn't have "back" feature 
+		//	=> always return 0;
+		return 0;
 	}
 	
 }

@@ -59,4 +59,8 @@ public interface ISlangWordService {
 	//	3.) definition: the definition that the quiz gave
 	public List<String> quizWithDefinition(int resultIndex, String definition);
 
+	//Write the current cache into workspace file
+	//	Return 0 if success
+	//When to use: when exit program
+	public int commitDataToCurrentFile();
 }

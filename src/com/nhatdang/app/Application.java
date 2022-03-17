@@ -12,7 +12,10 @@ public class Application{
 	}
 	
 	//Run the application
-	public void run() {
+	//Return 0 when there are no error
+	public int run() {
 		//do nothing yet
+		
+		return 0;
 	}
 }

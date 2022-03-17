@@ -24,8 +24,10 @@ public class WarningView implements IView {
 	}
 
 
+	//Print the error message, 
+	//	and make user hit enter to continue
 	@Override
-	public void showExecute() {
+	public int showExecute() {
 		
 		//Popup the message
 		System.out.println(errorMessage);
@@ -34,6 +36,8 @@ public class WarningView implements IView {
 		//Make dummy scanner to enter 
 		Scanner scanner = new Scanner(System.in);
 		scanner.nextLine();
+		
+		return 0;
 	}
 	
 }

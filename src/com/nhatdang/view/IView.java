@@ -19,18 +19,22 @@ public interface IView {
 	}
 	
 	//Implementation for showing view
-	default public void showExecute() {
+	//	Return 0 when only show view
+	//	Return 1 when back to the previous view
+	default public int showExecute() {
 		//do nothing
+		
+		return 0;
 	}
 	
 	//API for showing a view
-	default public void show() {
+	default public int show() {
 		
 		//Clear screen first
 		clearScreen();
 		
 		//Run the implementation
-		showExecute();
+		return showExecute();
 	}
 
 	

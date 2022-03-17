@@ -150,5 +150,11 @@ public enum SlangWordService implements ISlangWordService {
 				.collect(Collectors.toList());
 	}
 
-	
+	//Write the current cache into workspace file
+	//	Return 0 if success
+	//When to use: when exit program
+	@Override
+	public int commitDataToCurrentFile() {
+		return slangWordDAO.commitDataToCurrentFile();
+	}
 }
