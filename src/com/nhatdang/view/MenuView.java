@@ -9,11 +9,8 @@ import com.nhatdang.validator.DataValidator;
 import com.nhatdang.validator.IValidator;
 
 //Using enum for singleton pattern
-public enum MenuView implements IView {
+public class MenuView implements IView {
 
-	//Instance for singleton pattern
-	INSTANCE;
-	
 	//Decorator
 	private static final String SEPERATOR = "--------------------------";
 	private static final String TITLE = 	"-----------MENU-----------";
@@ -41,7 +38,7 @@ public enum MenuView implements IView {
 	private IValidator menuValidator;
 	
 	//Using Singleton Pattern
-	private MenuView() {
+	public MenuView() {
 		menuValidator = new DataValidator();
 	}
 	

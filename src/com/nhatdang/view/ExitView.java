@@ -1,13 +1,9 @@
 package com.nhatdang.view;
 
-//Using enum for singleton pattern
 //Usage: Exit view used for clearing screen
-public enum ExitView implements IView {
+public class ExitView implements IView {
 
-	//Instance of the singleton entity
-	INSTANCE;
-	
-	private ExitView () {
+	public ExitView () {
 		//do nothing
 	}
 

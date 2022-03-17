@@ -32,8 +32,9 @@ public enum MainController implements IController {
 	private MainController() {
 		views = new ArrayList<>(
 				Arrays.asList(
-						MenuView.INSTANCE,
-						ExitView.INSTANCE));
+						new MenuView(),
+						//new something
+						new ExitView()));
 		
 		//Setup the index
 		MAIN_MENU_INDEX = 0;
