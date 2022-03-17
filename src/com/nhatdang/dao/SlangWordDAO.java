@@ -203,7 +203,22 @@ public enum SlangWordDAO implements ISlangWordDAO {
 				
 		return errorCode;
 	}
+	
+	//Randomize an slang word
+	//	Return the random slang word
+	@Override
+	public SlangWord randomSlangWord() {
 		
+		//Buffer for all value in the dictionary
+		ArrayList<SlangWord> buffer = (ArrayList<SlangWord>) cache.values();
+		
+		//Randomize slang word by randomizing the index from [0; buffer.size() - 1] of the buffer
+		SlangWord randomSlangWord = buffer.get(rng.nextInt(buffer.size()));
+		
+		return randomSlangWord;
+	}
+		
+	
 	//	Randomize 'size' slang words and make answer to create quiz
 	//	The function has 2 output
 	//		1.) The return result: list of the 'size' slang words

@@ -37,6 +37,10 @@ public interface ISlangWordService {
 	//	Return 0 if success
 	public int resetToDefaultData();
 	
+	//Randomize an slang word
+	//	Return the random slang word
+	public SlangWord randomSlangWord();
+	
 	//Make a quiz:
 	//	1.) The quiz give a word
 	//	2.) Player will be given 4 definitions to choose

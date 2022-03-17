@@ -45,6 +45,10 @@ public interface ISlangWordDAO {
 	//	Return 2 if the slang word with the given word isn't defined
 	public int deleteSlangWord(String word);
 	
+	//Randomize an slang word
+	//	Return the random slang word
+	public SlangWord randomSlangWord();
+	
 	//	Randomize 'size' slang words and make answer to create quiz
 	//	The function has 2 output
 	//		1.) The return result: list of the 'size' slang words
