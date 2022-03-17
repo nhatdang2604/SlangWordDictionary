@@ -4,9 +4,9 @@ import com.nhatdang.view.IView;
 import com.nhatdang.view.MenuView;
 
 //The application
-public class SlangWordDictionary {
+public class Application{
 
-	public SlangWordDictionary() {
+	public Application() {
 		IView menu = MenuView.INSTANCE;
 		menu.show();
 	}
