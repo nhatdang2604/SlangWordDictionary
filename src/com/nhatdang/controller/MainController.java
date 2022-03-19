@@ -10,6 +10,7 @@ import com.nhatdang.service.ISlangWordService;
 import com.nhatdang.service.SlangWordService;
 import com.nhatdang.view.ExitView;
 import com.nhatdang.view.FindView;
+import com.nhatdang.view.HistoryView;
 import com.nhatdang.view.IView;
 import com.nhatdang.view.MenuView;
 
@@ -38,11 +39,12 @@ public enum MainController implements IController {
 						new MenuView(),
 						new FindView(FindType.FIND_BY_WORD),
 						new FindView(FindType.FIND_BY_KEYWORD),
+						new HistoryView(),
 						new ExitView()));
 		
 		//Setup the index
 		MAIN_MENU_INDEX = 0;
-		EXIT_INDEX = views.size();
+		EXIT_INDEX = views.size() - 1;
 		
 		//Inject the properties
 		slangWordService = SlangWordService.INSTANCE;
@@ -106,6 +108,24 @@ public enum MainController implements IController {
 		return MAIN_MENU_INDEX;
 	}
 	
+	//Execute to show finding history
+	//	Return the index of main menu after execute
+	private int executeHistoryView() {
+		
+		//Load the history view
+		HistoryView view = (HistoryView) views.get(currentViewId);
+		
+		//Load the history data
+		List<SlangWord> data = slangWordService.showFindHistory();
+		
+		//Set the data and show the view
+		view.setHistoryData(data).show();
+		
+		//After using find feature, return to main menu
+		return MAIN_MENU_INDEX;
+	}
+	
+	
 	//Execute before closing the app
 	//Return dummy value
 	private int executeExitView() {
@@ -135,6 +155,7 @@ public enum MainController implements IController {
 			if (MAIN_MENU_INDEX == currentViewId) {currentViewId = executeMenuView();}
 			else if (1 == currentViewId) {currentViewId = executeFindView(FindType.FIND_BY_WORD);}
 			else if (2 == currentViewId) {currentViewId = executeFindView(FindType.FIND_BY_KEYWORD);}
+			else if (3 == currentViewId) {currentViewId = executeHistoryView();}
 			else if (EXIT_INDEX == currentViewId) {currentViewId = executeExitView(); break;}	//break if exit option is choosen
 			
 		}

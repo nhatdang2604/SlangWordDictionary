@@ -21,7 +21,7 @@ public class MenuView implements IView {
 					"1. Find slang word by word",
 					"2. Find slang word by keyword",
 					"3. Show history",
-					"4. Add new a slang word",
+					"4. Add a new slang word",
 					"5. Edit a slang word",
 					"6. Delete a slang word",
 					"7. Reset data to default",
