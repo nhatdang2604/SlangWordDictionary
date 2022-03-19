@@ -1,8 +1,17 @@
 package com.nhatdang.entity;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 //Entity of the project
 public class SlangWord {
-		
+	
+	//Fields name for output
+	public static final List<String> FIELD_NAMES = new ArrayList<>(
+				Arrays.asList("Word", "Definition")); 
+			
+	
 	//Attributes
 	private String word;
 	private String definition;

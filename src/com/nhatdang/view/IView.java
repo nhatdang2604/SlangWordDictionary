@@ -5,6 +5,7 @@ public interface IView {
 	//Code for returning in show() and showExecute()
 	public static final int NO_ERROR_CODE = 0;
 	public static final int BACK_CODE = 1;
+	public static final int FAIL_CODE = 2;
 	
 	//Clear the console screen
 	default void clearScreen() {

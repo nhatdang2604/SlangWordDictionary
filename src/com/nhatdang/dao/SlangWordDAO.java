@@ -263,4 +263,9 @@ public enum SlangWordDAO implements ISlangWordDAO {
 		return errorCode;
 	}
 
+	//Check if the current cache has the given word from the slang word
+	public boolean isContainWord(String word) {
+		return cache.containsKey(word);
+	}
+	
 }

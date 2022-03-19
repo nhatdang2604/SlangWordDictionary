@@ -8,6 +8,7 @@ import com.nhatdang.dao.ISlangWordDAO.FindType;
 import com.nhatdang.entity.SlangWord;
 import com.nhatdang.service.ISlangWordService;
 import com.nhatdang.service.SlangWordService;
+import com.nhatdang.view.CreateView;
 import com.nhatdang.view.ExitView;
 import com.nhatdang.view.FindView;
 import com.nhatdang.view.HistoryView;
@@ -41,6 +42,7 @@ public enum MainController implements IController {
 						new FindView(FindType.FIND_BY_WORD),
 						new FindView(FindType.FIND_BY_KEYWORD),
 						new HistoryView(),
+						new CreateView(),
 						new ExitView()));
 		
 		//Setup the index
@@ -126,6 +128,45 @@ public enum MainController implements IController {
 		return MAIN_MENU_INDEX;
 	}
 	
+	//Execute to create new slang word
+	//	Return the index of main menu after execute
+	private int executeCreateView() {
+		
+		//Load the create view
+		CreateView view = (CreateView) views.get(currentViewId);
+				
+		//Loop until errorCode == IView.BACK_CODE
+		while (true) {
+			
+			//Show the form to input the slang word data
+			int errorCode = view.getSlangWordForm().show();
+			
+			//Break out the loop condition
+			if (IView.BACK_CODE == errorCode) {break;}
+			
+			//Get the slang word from the input
+			SlangWord model = (SlangWord) view.getSlangWordForm().getModel();
+			
+			//Try to check if the slang word from the model is contained
+			boolean isSlangWordContained = slangWordService.isContainWord(model.getWord());
+			
+			//If the slang word has not been existed => create new one
+			if(!isSlangWordContained) {
+				slangWordService.addSlangWord(model);
+			}
+			
+			//Show up the create result to the screen
+			errorCode = view.setState(isSlangWordContained).show();
+			
+			//Break if the slang word is create successfully
+			if (IView.NO_ERROR_CODE == errorCode) {break;}
+		}
+		
+		//After using create feature, return to main menu
+		return MAIN_MENU_INDEX;
+	}
+	
+	
 	//Execute to make a random slang word
 	//	Return the index of main menu after execute
 	private int executeRandomView() {
@@ -173,6 +214,7 @@ public enum MainController implements IController {
 			else if (1 == currentViewId) {currentViewId = executeFindView(FindType.FIND_BY_WORD);}
 			else if (2 == currentViewId) {currentViewId = executeFindView(FindType.FIND_BY_KEYWORD);}
 			else if (3 == currentViewId) {currentViewId = executeHistoryView();}
+			else if (4 == currentViewId) {currentViewId = executeCreateView();}
 			else if (8 == currentViewId) {currentViewId = executeRandomView();}
 			else if (EXIT_INDEX == currentViewId) {currentViewId = executeExitView(); break;}	//break if exit option is choosen
 			

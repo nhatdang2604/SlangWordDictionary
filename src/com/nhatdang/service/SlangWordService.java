@@ -157,4 +157,9 @@ public enum SlangWordService implements ISlangWordService {
 	public int commitDataToCurrentFile() {
 		return slangWordDAO.commitDataToCurrentFile();
 	}
+	
+	//Check if the current cache has the given word from the slang word
+	public boolean isContainWord(String word) {
+		return slangWordDAO.isContainWord(word);
+	}
 }

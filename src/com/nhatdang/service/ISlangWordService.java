@@ -63,4 +63,7 @@ public interface ISlangWordService {
 	//	Return 0 if success
 	//When to use: when exit program
 	public int commitDataToCurrentFile();
+	
+	//Check if the current cache has the given word from the slang word
+	public boolean isContainWord(String word);
 }
