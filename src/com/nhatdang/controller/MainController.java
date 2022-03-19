@@ -13,6 +13,7 @@ import com.nhatdang.view.FindView;
 import com.nhatdang.view.HistoryView;
 import com.nhatdang.view.IView;
 import com.nhatdang.view.MenuView;
+import com.nhatdang.view.RandomView;
 
 //Using enum for singleton pattern
 public enum MainController implements IController {
@@ -125,6 +126,22 @@ public enum MainController implements IController {
 		return MAIN_MENU_INDEX;
 	}
 	
+	//Execute to make a random slang word
+	//	Return the index of main menu after execute
+	private int executeRandomView() {
+			
+		//Load the history view
+		RandomView view = (RandomView) views.get(currentViewId);
+			
+		//Load the random slang word
+		SlangWord randomSlangWord = slangWordService.randomSlangWord();
+			
+		//Set the random slang word and show the view
+		view.setRandomSlangWord(randomSlangWord).show();
+			
+		//After using find feature, return to main menu
+		return MAIN_MENU_INDEX;
+	}
 	
 	//Execute before closing the app
 	//Return dummy value
@@ -156,6 +173,7 @@ public enum MainController implements IController {
 			else if (1 == currentViewId) {currentViewId = executeFindView(FindType.FIND_BY_WORD);}
 			else if (2 == currentViewId) {currentViewId = executeFindView(FindType.FIND_BY_KEYWORD);}
 			else if (3 == currentViewId) {currentViewId = executeHistoryView();}
+			else if (8 == currentViewId) {currentViewId = executeRandomView();}
 			else if (EXIT_INDEX == currentViewId) {currentViewId = executeExitView(); break;}	//break if exit option is choosen
 			
 		}

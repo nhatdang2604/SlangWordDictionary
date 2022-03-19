@@ -8,19 +8,19 @@ import com.nhatdang.entity.SlangWord;
 import com.nhatdang.view.form.FindForm;
 import com.nhatdang.view.form.IForm;
 
-public class HistoryView implements IView {
+public class RandomView implements IView {
 
 
-	//List of history data
-	private List<SlangWord> historyData;
+	//The random slang word
+	private SlangWord randomSlangWord;
 	
-	public HistoryView() {
-		historyData = null;
+	public RandomView() {
+		randomSlangWord = null;
 	}
 	
-	//Set the history data
-	public IView setHistoryData(List<SlangWord> historyData) {
-		this.historyData = historyData;
+	//Set the random slang word data
+	public IView setRandomSlangWord(SlangWord randomSlangWord) {
+		this.randomSlangWord = randomSlangWord;
 		return this;
 	}
 	
@@ -31,15 +31,13 @@ public class HistoryView implements IView {
 		Scanner scanner = new Scanner(System.in);
 		
 		//Check if there are no history data before
-		if (null == historyData  || historyData .isEmpty()) {
-			System.out.println("Empty history!");
+		if (null == randomSlangWord) {
+			System.out.println("Today have no slang word!");
 		} else {
 			
 			//Print all the history slang word
-			System.out.println("History: ");
-			historyData.forEach(slangWord -> {
-				System.out.println(slangWord);
-			});
+			System.out.println("Slang word of the day: ");
+			System.out.println(randomSlangWord);
 			
 		}
 		
