@@ -51,9 +51,12 @@ public class CreateView implements IView {
 			errorCode = FAIL_CODE;
 		}
 		
-		//Print the next instruction
+		//Print the message and instruction
+		System.out.println(message);
 		System.out.print(instruction);
-		scanner.nextLine();
+		
+		//For blocking user input
+		scanner.nextLine();	
 		
 		//Return the error code
 		return errorCode;
