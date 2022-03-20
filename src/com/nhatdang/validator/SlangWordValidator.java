@@ -17,9 +17,7 @@ public class SlangWordValidator implements IValidator {
 	//Service for validating
 	private ISlangWordService slangWordService;
 	
-	//Model for validating
-	private SlangWord model;
-	
+
 	private static final List<String> INVALID_WORDS = new ArrayList<>(
 			Arrays.asList(
 					"`"));
@@ -27,6 +25,7 @@ public class SlangWordValidator implements IValidator {
 	private static final List<String> ERRORS = new ArrayList<>(
 			Arrays.asList(
 					"Slang word is already existed",
+					"Slang word is not existed",
 					"Field has invalid character: " + INVALID_WORDS));
 	
 	
@@ -35,19 +34,28 @@ public class SlangWordValidator implements IValidator {
 		slangWordService = SlangWordService.INSTANCE;
 	}
 	
-	//Setter for model
-	public void setModel(SlangWord slangWord) {this.model = slangWord; }
 	
-	
-	//Try to find the slang word with the given word
-	public boolean isStudentExist(int id) {
+	//Try to check the existance the slang word with the given word
+	public boolean isSlangWordExist(String word) {
 		
-		boolean result = (null != slangWordService.findByWord(model.getWord()));
-		if (!result) {
+		boolean result = (null != slangWordService.findByWord(word));
+		if (result) {
 			warningView.setErrorMessage(ERRORS.get(0)).show();
 		}
 		
 		return result;
+	}
+	
+	//Try to check the existance the slang word with the given word
+	public boolean isSlangWordNotExist(String word) {
+		
+		boolean result = (null == slangWordService.findByWord(word));
+		if (result) {
+			warningView.setErrorMessage(ERRORS.get(1)).show();
+		}
+		
+		return result;
+		
 	}
 	
 	//Check if the given buffer from user is contain invalid word
@@ -55,7 +63,7 @@ public class SlangWordValidator implements IValidator {
 		
 		for (String word: INVALID_WORDS) {
 			if (buffer.contains(word)) {
-				warningView.setErrorMessage(ERRORS.get(1)).show();
+				warningView.setErrorMessage(ERRORS.get(2)).show();
 				return true;
 			}
 		}

@@ -70,7 +70,7 @@ public interface IForm extends IView {
 		
 		//	Error code == 0: no error
 		//	Error code == 1: back is pressed
-		int errorCode = (null == data?1:0);
+		int errorCode = (null == data?IView.BACK_CODE:IView.NO_ERROR_CODE);
 		return errorCode;
 	}
 }

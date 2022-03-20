@@ -2,7 +2,6 @@ package com.nhatdang.view;
 
 import java.util.Scanner;
 
-import com.nhatdang.entity.SlangWord;
 import com.nhatdang.view.form.IForm;
 import com.nhatdang.view.form.SlangWordForm;
 import com.nhatdang.view.form.SlangWordForm.FormMode;

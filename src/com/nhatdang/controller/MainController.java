@@ -9,6 +9,7 @@ import com.nhatdang.entity.SlangWord;
 import com.nhatdang.service.ISlangWordService;
 import com.nhatdang.service.SlangWordService;
 import com.nhatdang.view.CreateView;
+import com.nhatdang.view.EditView;
 import com.nhatdang.view.ExitView;
 import com.nhatdang.view.FindView;
 import com.nhatdang.view.HistoryView;
@@ -43,6 +44,7 @@ public enum MainController implements IController {
 						new FindView(FindType.FIND_BY_KEYWORD),
 						new HistoryView(),
 						new CreateView(),
+						new EditView(),
 						new ExitView()));
 		
 		//Setup the index
@@ -166,6 +168,26 @@ public enum MainController implements IController {
 		return MAIN_MENU_INDEX;
 	}
 	
+	//Execute to edit an existed slang word
+	//	Return the index of main menu after execute
+	private int executeEditView() {
+		
+		//Load the edit view
+		EditView view = (EditView) views.get(currentViewId);
+		
+		//Process the edit view
+		int errorCode = view.show();
+		
+		//Check if the view return code is no error
+		//	=> Update the data
+		if (IView.NO_ERROR_CODE == errorCode) {
+			SlangWord editSlangWord = view.getDataForm().getModel();
+			slangWordService.editSlangWord(editSlangWord);
+		}
+		
+		//After using edit feature, return to main menu
+		return MAIN_MENU_INDEX;
+	}
 	
 	//Execute to make a random slang word
 	//	Return the index of main menu after execute
@@ -215,6 +237,7 @@ public enum MainController implements IController {
 			else if (2 == currentViewId) {currentViewId = executeFindView(FindType.FIND_BY_KEYWORD);}
 			else if (3 == currentViewId) {currentViewId = executeHistoryView();}
 			else if (4 == currentViewId) {currentViewId = executeCreateView();}
+			else if (5 == currentViewId) {currentViewId = executeEditView();}
 			else if (8 == currentViewId) {currentViewId = executeRandomView();}
 			else if (EXIT_INDEX == currentViewId) {currentViewId = executeExitView(); break;}	//break if exit option is choosen
 			

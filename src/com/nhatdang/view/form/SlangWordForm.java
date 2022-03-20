@@ -130,7 +130,7 @@ public class SlangWordForm implements IForm {
 			if(!slangWordValidator.isContainInvalidWord(input)) {
 				
 				if (0 == level) {model.setWord(input); break;}
-				if (1 == level) {model.setDefinition(input); break;}
+				else if (1 == level) {model.setDefinition(input); break;}
 		
 			}
 			
@@ -145,16 +145,31 @@ public class SlangWordForm implements IForm {
 	//	return the slang word, which is parsed data from the form
 	public SlangWord fillForm() {
 		
-		
-		//Recreate the Model for the form, each time filling
-		model = new SlangWord();
-		
 		//Print the headder
 		printHeader();
 		
 		//Input each field: 
 		int size = SlangWord.FIELD_NAMES.size();
-		for (int level = 0; level < size; ++level) {
+		
+		//Default situation is mode.equals(FormMode.CREATE)
+		int startLevel = 0;
+		
+		//Check if the mode.equals(FormMode.UPDATE)
+		if (mode.equals(FormMode.UPDATE)) {
+			
+			//Ignore the Word fields of slang word => because this field is uneditable
+			startLevel = 1;
+			
+			//Populate the Word field data
+			repopulateData(startLevel);
+		}
+		else if (mode.equals(FormMode.CREATE)) {
+			
+			//Recreate the Model for the form
+			model = new SlangWord();
+		}
+		
+		for (int level = startLevel; level < size; ++level) {
 			
 			//If the input is $back => terminate
 			if (!addDataToModel(level)) {
