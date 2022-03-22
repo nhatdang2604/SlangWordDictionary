@@ -236,10 +236,17 @@ public enum SlangWordDAO implements ISlangWordDAO {
 		ArrayList<SlangWord> buffer = (ArrayList<SlangWord>) cache.values();
 		
 		//Start randomize
-		for (int i = 0; i < size; ++i) {
+		int counter = 0;
+		do  {
+			
 			int index = rng.nextInt(size);	//index of the lucky slang word
-			result.add(buffer.get(index));	//add the lucky slang word into result
-		}
+			SlangWord randomSlangWord = buffer.get(index);	//Get the lucky slang word
+			if(!result.contains(randomSlangWord)) {
+				++counter;
+				result.add(randomSlangWord);//add the lucky slang word into result
+			}
+				
+		} while (size != counter);
 		
 		//Make the correct answer
 		resultIndex = rng.nextInt(size);

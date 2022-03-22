@@ -64,7 +64,7 @@ public class EditView implements IView {
 			}
 		
 			//Inject a dummy slang word with the given key, to the data model
-			dataForm.setModel(new SlangWord(key, "hehe"));
+			dataForm.setModel(new SlangWord(key, null));
 			
 			//Return to the find form if user input $back in the update data form
 			int dataFormErrorCode = dataForm.show();

@@ -16,7 +16,9 @@ import com.nhatdang.view.FindView;
 import com.nhatdang.view.HistoryView;
 import com.nhatdang.view.IView;
 import com.nhatdang.view.MenuView;
+import com.nhatdang.view.QuizView;
 import com.nhatdang.view.RandomView;
+import com.nhatdang.view.form.QuizForm.QuizType;
 
 //Using enum for singleton pattern
 public enum MainController implements IController {
@@ -47,6 +49,9 @@ public enum MainController implements IController {
 						new CreateView(),
 						new EditView(),
 						new DeleteView(),
+						new RandomView(),
+						new QuizView(QuizType.GIVEN_WORD),
+						new QuizView(QuizType.GIVEN_DEFINITION),
 						new ExitView()));
 		
 		//Setup the index
@@ -217,7 +222,7 @@ public enum MainController implements IController {
 	//	Return the index of main menu after execute
 	private int executeRandomView() {
 			
-		//Load the history view
+		//Load the random view
 		RandomView view = (RandomView) views.get(currentViewId);
 			
 		//Load the random slang word
@@ -227,6 +232,48 @@ public enum MainController implements IController {
 		view.setRandomSlangWord(randomSlangWord).show();
 			
 		//After using find feature, return to main menu
+		return MAIN_MENU_INDEX;
+	}
+	
+
+	private int executeQuizView(QuizType type) {
+		
+		//Load the quiz view
+		QuizView view = (QuizView) views.get(currentViewId);
+		
+		//The index of the correct answer
+		int resultIndex = -1;
+		
+		//The list of the answers
+		List<String> answers = null;
+		
+		//The given word/definition
+		String given = null;
+		
+		while(true) {
+			
+			//Get the answers list from database
+			answers = (type.equals(QuizType.GIVEN_WORD)?slangWordService.quizWithWord(resultIndex, given):
+						(type.equals(QuizType.GIVEN_DEFINITION)?slangWordService.quizWithDefinition(resultIndex, given):null));
+			
+		
+			//Check if the user input $back in quiz 
+			//If yes => back to main menu
+			if (IView.BACK_CODE == view.setAnswers(answers)
+										.setGiven(given)
+										.setCorrectAnswerIndex(resultIndex)
+										.getQuizForm().show()) {
+				break;
+			}
+			
+			//Check if ther user answer correctly
+			boolean isCorrect = (Integer)view.getQuizForm().getModel() == resultIndex;
+			
+			//Show the final text for correct/incorrect answer
+			view.setCorrectState(isCorrect).show();
+		}
+		
+		//After using quiz feature, return to main menu
 		return MAIN_MENU_INDEX;
 	}
 	
@@ -263,7 +310,10 @@ public enum MainController implements IController {
 			else if (4 == currentViewId) {currentViewId = executeCreateView();}
 			else if (5 == currentViewId) {currentViewId = executeEditView();}
 			else if (6 == currentViewId) {currentViewId = executeDeleteView();}
+			//else if (7 == currentViewId) {currentViewId = executeResetView();}
 			else if (8 == currentViewId) {currentViewId = executeRandomView();}
+			else if (9 == currentViewId) {currentViewId = executeQuizView(QuizType.GIVEN_WORD);}
+			else if (10 == currentViewId) {currentViewId = executeQuizView(QuizType.GIVEN_DEFINITION);}
 			else if (EXIT_INDEX == currentViewId) {currentViewId = executeExitView(); break;}	//break if exit option is choosen
 			
 		}

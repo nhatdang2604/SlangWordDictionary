@@ -3,16 +3,18 @@ package com.nhatdang.view;
 import java.util.Scanner;
 
 import com.nhatdang.dao.ISlangWordDAO.FindType;
-import com.nhatdang.entity.SlangWord;
 import com.nhatdang.validator.SlangWordValidator;
+import com.nhatdang.view.form.ConfirmForm;
 import com.nhatdang.view.form.FindForm;
-import com.nhatdang.view.form.SlangWordForm;
 import com.nhatdang.view.form.SlangWordForm.FormMode;
 
 public class DeleteView implements IView {
 
 	//Form for finding the delete slang word
 	private FindForm findForm;
+	
+	//Form for delete confirmation
+	private ConfirmForm confirmForm;
 	
 	//Validator for checking if the slang word is existed
 	private SlangWordValidator validator;
@@ -24,6 +26,9 @@ public class DeleteView implements IView {
 		
 		//Validator for checking the existance of the delete slang word
 		validator = new SlangWordValidator();
+		
+		//Confirm form for deleting
+		confirmForm = new ConfirmForm(FormMode.DELETE);
 	}	
 	
 	//Getter for find view
@@ -43,6 +48,12 @@ public class DeleteView implements IView {
 			//Return to back code if user input $back in the find slang word form
 			if (IView.BACK_CODE == findForm.show()) {return BACK_CODE;}
 		
+			//Try to show the confirmation dialog
+			confirmForm.show();
+			
+			//If the user cancel the confirmation => back to the find form
+			if (!(Boolean)confirmForm.getModel()) {continue;}
+			
 			//Get the input word from user
 			String key = findForm.getModel();
 		

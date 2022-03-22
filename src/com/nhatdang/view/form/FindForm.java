@@ -22,6 +22,7 @@ public class FindForm implements IForm {
 	
 	public FindForm(FindType findType) {
 		this.findType = findType;
+		backFlag = false;
 		validator = new DataValidator();
 	}
 
