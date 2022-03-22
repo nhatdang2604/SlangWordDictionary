@@ -73,6 +73,9 @@ public class EditView implements IView {
 			} 
 			else if (IView.NO_ERROR_CODE == dataFormErrorCode) {
 				
+				//Clear screen first
+				clearScreen();
+				
 				//Print the successfully reported
 				System.out.println("The slang word has been editted!");
 				System.out.print("\nPress enter to return to main menu: ");

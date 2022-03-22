@@ -5,10 +5,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 import com.nhatdang.config.FileConfig;
 import com.nhatdang.config.IConfig;
 import com.nhatdang.entity.SlangWord;
+import com.nhatdang.entity.quiz.Quiz;
 import com.nhatdang.utils.DataWriter;
 import com.nhatdang.utils.Parser;
 
@@ -210,7 +212,10 @@ public enum SlangWordDAO implements ISlangWordDAO {
 	public SlangWord randomSlangWord() {
 		
 		//Buffer for all value in the dictionary
-		ArrayList<SlangWord> buffer = (ArrayList<SlangWord>) cache.values();
+		ArrayList<SlangWord> buffer = cache
+					.values()
+					.stream()
+					.collect(Collectors.toCollection(ArrayList::new));
 		
 		//Randomize slang word by randomizing the index from [0; buffer.size() - 1] of the buffer
 		SlangWord randomSlangWord = buffer.get(rng.nextInt(buffer.size()));
@@ -218,40 +223,53 @@ public enum SlangWordDAO implements ISlangWordDAO {
 		return randomSlangWord;
 	}
 		
-	
 	//	Randomize 'size' slang words and make answer to create quiz
-	//	The function has 2 output
-	//		1.) The return result: list of the 'size' slang words
-	//		2.) answerIndex: the correct answer index in the list
+	//	The function return this quiz
 	@Override
-	public List<SlangWord> randomSlangWordsToMakeQuiz(int size, int resultIndex) {
+	public Quiz randomSlangWordsToMakeQuiz(int size){
 		
-		//Return null if there are not enough slang word in dictionary
+		//Return -1 if there are not enough slang word in dictionary
 		if (cache.size() < size) return null;
 		
-		//The target 
-		ArrayList<SlangWord> result = new ArrayList<>();
-	
 		//Buffer for all value in the dictionary
-		ArrayList<SlangWord> buffer = (ArrayList<SlangWord>) cache.values();
+		ArrayList<SlangWord> buffer = (ArrayList<SlangWord>) cache
+															.values()
+															.stream()
+															.collect(Collectors.toList());
+		
+		//Options for the quiz
+		List<SlangWord> options = new ArrayList<>();
+		
+		//Get the size of the dictionary
+		int bufferSize = buffer.size();
 		
 		//Start randomize
 		int counter = 0;
 		do  {
 			
-			int index = rng.nextInt(size);	//index of the lucky slang word
+			int index = rng.nextInt(bufferSize);	//index of the lucky slang word
 			SlangWord randomSlangWord = buffer.get(index);	//Get the lucky slang word
-			if(!result.contains(randomSlangWord)) {
+			if(!options.contains(randomSlangWord)) {
 				++counter;
-				result.add(randomSlangWord);//add the lucky slang word into result
+				options.add(randomSlangWord);//add the lucky slang word into result
 			}
 				
 		} while (size != counter);
 		
-		//Make the correct answer
-		resultIndex = rng.nextInt(size);
+		//Generate the answer index
+		int answerIndex = rng.nextInt(size);
 		
-		return result;
+		//Generate the given index until given index != answer index
+		int givenIndex = -1;
+		do {
+			givenIndex =  rng.nextInt(size);
+		} while (givenIndex == answerIndex);
+		
+		//Generate the given word/definition
+		SlangWord given = options.get(givenIndex);
+		
+		//Return the quiz
+		return new Quiz(answerIndex, options, given);
 	}
 	
 	//Write the current cache into workspace file
@@ -264,7 +282,7 @@ public enum SlangWordDAO implements ISlangWordDAO {
 		DataWriter writer = new DataWriter();
 		
 		//Write data from cache into the data.txt
-		int errorCode = writer.writeSlangWordsToCSV(cache, 
+		int errorCode = writer.writeSlangWordsToFile(cache, 
 				((FileConfig)fileConfig).getWorkspaceDataFile());
 		
 		return errorCode;

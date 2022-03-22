@@ -22,7 +22,7 @@ public class QuizForm implements IForm {
 	private Integer model;
 
 	//List of the answers
-	private List<String> answers;
+	private List<String> options;
 	
 	//The question from the quiz
 	private String given;
@@ -33,14 +33,14 @@ public class QuizForm implements IForm {
 	//Getters
 	@Override public boolean getBackFlag() {return backFlag;}
 	@Override public Object getModel() {return model;}
-	public List<String> getAnswers() {return answers;}
+	public List<String> getAnswers() {return options;}
 	public String getGiven() {return given;}
 	
 	
 	//Setters
 	@Override public void setBackFlag(boolean value) {backFlag = value;}
 	@Override public void setModel(Object value) {model = (Integer) value;}
-	public QuizForm setAnswer(List<String> answer) {this.answers = answer; return this;}
+	public QuizForm setOptions(List<String> answer) {this.options = answer; return this;}
 	public QuizForm setGiven(String given) {this.given = given; return this;}
 	
 	
@@ -64,15 +64,15 @@ public class QuizForm implements IForm {
 		final String question_part2 = 
 					"Which is the correct" +  
 						(type.equals(QuizType.GIVEN_WORD)?" definition of the given slang word?":
-						type.equals(QuizType.GIVEN_DEFINITION)? " slang word of the given definition? ":"");
+						type.equals(QuizType.GIVEN_DEFINITION)? " slang word of the given definition?":"");
 		
-		builder.append(question_part1 + "\n" + question_part2);
+		builder.append(question_part1 + given + "\n" + question_part2 + "\n");
 		
 		//The answers part
-		int size = answers.size();
+		int size = options.size();
 		for (int i = 0; i < size; ++i) {
 			int idx = i + 1;
-			builder.append(idx + ")" + answers.get(i) + "\n");
+			builder.append(idx + ")" + options.get(i) + "\n");
 		}
 		
 		builder.append("Give the index of the answer here: ");
@@ -110,7 +110,7 @@ public class QuizForm implements IForm {
 			
 			//Else => the input must be integer and in range [1, answers.size()]
 			if (validator.isInteger(buffer)) {
-				if (validator.isIntegerOutOfRange(buffer, 1, answers.size())) {
+				if (validator.isIntegerOutOfRange(buffer, 1, options.size())) {
 					
 					//Reduce the selected index by 1 for sync with the index in list
 					model = Integer.parseInt(buffer) - 1;

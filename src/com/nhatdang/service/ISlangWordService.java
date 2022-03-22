@@ -3,6 +3,8 @@ package com.nhatdang.service;
 import java.util.List;
 
 import com.nhatdang.entity.SlangWord;
+import com.nhatdang.entity.quiz.QuizGivenDefinition;
+import com.nhatdang.entity.quiz.QuizGivenWord;
 
 public interface ISlangWordService {
 	
@@ -44,20 +46,14 @@ public interface ISlangWordService {
 	//Make a quiz:
 	//	1.) The quiz give a word
 	//	2.) Player will be given 4 definitions to choose
-	//The function have 3 output:
-	//	1.) The return result: 4 definitions to answer
-	//	2.) resultIndex: index of the correct answer
-	//	3.) word: the word that the quiz gave
-	public List<String> quizWithWord(int resultIndex, String word);
+	//The function output is the quiz with word object
+	public QuizGivenWord quizWithWord();
 
 	//Make a quiz:
 	//	1.) The quiz give a definition
 	//	2.) Player will be given 4 slang words to choose
-	//The function have 3 output:
-	//	1.) The return result: 4 slang words to answer
-	//	2.) resultIndex: index of the correct answer
-	//	3.) definition: the definition that the quiz gave
-	public List<String> quizWithDefinition(int resultIndex, String definition);
+	//The function output is the quiz with definition object
+	public QuizGivenDefinition quizWithDefinition();
 
 	//Write the current cache into workspace file
 	//	Return 0 if success

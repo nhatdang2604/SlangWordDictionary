@@ -15,7 +15,7 @@ public class QuizView implements IView {
 	private QuizForm quizForm;
 	
 	//List of answers for the user
-	private List<String> answers;
+	private List<String> options;
 	
 	//The question from the quiz
 	private String given;
@@ -32,9 +32,9 @@ public class QuizView implements IView {
 	}
 	
 	//Setters
-	public QuizView setAnswers(List<String> answers) {
-		this.answers = answers;
-		quizForm.setAnswer(answers);
+	public QuizView setOptions(List<String> options) {
+		this.options = options;
+		quizForm.setOptions(options);
 		return this;
 	}
 
@@ -69,7 +69,7 @@ public class QuizView implements IView {
 		//Get the true index
 		int oneIndexingIndex = correctAnswerIndex + 1;
 		
-		return "Incorrect! The answer is: " + oneIndexingIndex + ") " + answers.get(oneIndexingIndex - 1);
+		return "Incorrect! The answer is: " + oneIndexingIndex + ") " + options.get(oneIndexingIndex - 1);
 	}
 	
 	@Override

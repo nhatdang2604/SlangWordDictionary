@@ -12,7 +12,7 @@ import com.nhatdang.entity.SlangWord;
 public class DataWriter {
 
 	//Write a dictionary of slang word into a file which has the given path
-	public int writeSlangWordsToCSV(Map<String, SlangWord> dictionary, String path) { 
+	public int writeSlangWordsToFile(Map<String, SlangWord> dictionary, String path) { 
 	
 		//Error code
 		int errorCode = 0;
@@ -35,7 +35,7 @@ public class DataWriter {
 				//Write data to file, line by line
 				writer.write(slangWord.getWord() 
 						+ Parser.SLANG_WORD_DELIMITER 
-						+ slangWord.getDefinition());
+						+ slangWord.getDefinition() + "\r\n");
 			}
 			
 			

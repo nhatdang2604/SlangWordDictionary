@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.nhatdang.entity.SlangWord;
+import com.nhatdang.entity.quiz.Quiz;
 
 public interface ISlangWordDAO {
 
@@ -50,10 +51,8 @@ public interface ISlangWordDAO {
 	public SlangWord randomSlangWord();
 	
 	//	Randomize 'size' slang words and make answer to create quiz
-	//	The function has 2 output
-	//		1.) The return result: list of the 'size' slang words
-	//		2.) answerIndex: the correct answer index in the list
-	public List<SlangWord> randomSlangWordsToMakeQuiz(int size, int answerIndex);
+	//	The function return this quiz
+	public Quiz randomSlangWordsToMakeQuiz(int size);
 	
 	//Write the current cache into workspace file
 	//	Return 0 if success

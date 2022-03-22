@@ -1,11 +1,12 @@
 package com.nhatdang.service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import com.nhatdang.dao.ISlangWordDAO;
 import com.nhatdang.dao.SlangWordDAO;
 import com.nhatdang.entity.SlangWord;
+import com.nhatdang.entity.quiz.QuizGivenDefinition;
+import com.nhatdang.entity.quiz.QuizGivenWord;
 
 //Service implement by using enum for singleton pattern
 public enum SlangWordService implements ISlangWordService {
@@ -17,7 +18,7 @@ public enum SlangWordService implements ISlangWordService {
 	private ISlangWordDAO slangWordDAO;
 	
 	//The name give it all
-	private static final int NUMBER_OF_ANSWERS_IN_QUIZ = 4;
+	private static final int NUMBER_OF_OPTIONS_IN_QUIZ = 4;
 	
 	//Inject properties
 	private SlangWordService() {
@@ -99,55 +100,27 @@ public enum SlangWordService implements ISlangWordService {
 	//Make a quiz:
 	//	1.) The quiz give a word
 	//	2.) Player will be given 4 definitions to choose
-	//The function have 3 output:
-	//	1.) The return result: 4 definitions to answer
-	//	2.) resultIndex: index of the correct answer
-	//	3.) word: the word that the quiz gave
+	//The function output is the quiz with word object
 	@Override
-	public List<String> quizWithWord(int resultIndex, String word){
+	public QuizGivenWord quizWithWord(){
 		
 		//Get the number of answer
-		final int NUMBER_OF_ANSWER = NUMBER_OF_ANSWERS_IN_QUIZ;
+		final int NUMBER_OF_OPTIONS = NUMBER_OF_OPTIONS_IN_QUIZ;
 		
-		//List of 4 random slang words
-		List<SlangWord> answers = 
-				slangWordDAO.randomSlangWordsToMakeQuiz(NUMBER_OF_ANSWER, resultIndex);
-		
-		//Get the word for the player
-		word = answers.get(resultIndex).getWord();		
-		
-		//Return the list of definitions of those slang words
-		return answers
-				.stream()
-				.map(slangWord -> slangWord.getDefinition())
-				.collect(Collectors.toList());
+		return new QuizGivenWord(slangWordDAO.randomSlangWordsToMakeQuiz(NUMBER_OF_OPTIONS));
 	}
 
 	//Make a quiz:
 	//	1.) The quiz give a definition
 	//	2.) Player will be given 4 slang words to choose
-	//The function have 3 output:
-	//	1.) The return result: 4 slang words to answer
-	//	2.) resultIndex: index of the correct answer
-	//	3.) definition: the definition that the quiz gave
+	//The function output is the quiz with definition object
 	@Override
-	public List<String> quizWithDefinition(int resultIndex, String definition){
+	public QuizGivenDefinition quizWithDefinition(){
 		
-		//Number of answer in a quiz
-		final int NUMBER_OF_ANSWER = NUMBER_OF_ANSWERS_IN_QUIZ;
+		//Get the number of answer
+		final int NUMBER_OF_OPTIONS = NUMBER_OF_OPTIONS_IN_QUIZ;
 				
-		//List of 4 random slang words
-		List<SlangWord> answers = 
-				slangWordDAO.randomSlangWordsToMakeQuiz(NUMBER_OF_ANSWER, resultIndex);
-				
-		//Get the definition for the player
-		definition = answers.get(resultIndex).getDefinition();
-		
-		//Return the list of words of those slang words
-		return answers
-				.stream()
-				.map(slangWord -> slangWord.getWord())
-				.collect(Collectors.toList());
+		return new QuizGivenDefinition(slangWordDAO.randomSlangWordsToMakeQuiz(NUMBER_OF_OPTIONS));
 	}
 
 	//Write the current cache into workspace file

@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.nhatdang.dao.ISlangWordDAO.FindType;
 import com.nhatdang.entity.SlangWord;
+import com.nhatdang.entity.quiz.StringQuiz;
 import com.nhatdang.service.ISlangWordService;
 import com.nhatdang.service.SlangWordService;
 import com.nhatdang.view.CreateView;
@@ -260,33 +261,24 @@ public enum MainController implements IController {
 		//Load the quiz view
 		QuizView view = (QuizView) views.get(currentViewId);
 		
-		//The index of the correct answer
-		int resultIndex = -1;
-		
-		//The list of the answers
-		List<String> answers = null;
-		
-		//The given word/definition
-		String given = null;
-		
 		while(true) {
 			
 			//Get the answers list from database
-			answers = (type.equals(QuizType.GIVEN_WORD)?slangWordService.quizWithWord(resultIndex, given):
-						(type.equals(QuizType.GIVEN_DEFINITION)?slangWordService.quizWithDefinition(resultIndex, given):null));
+			StringQuiz quiz = (type.equals(QuizType.GIVEN_WORD)?slangWordService.quizWithWord():
+						(type.equals(QuizType.GIVEN_DEFINITION)?slangWordService.quizWithDefinition():null));
 			
 		
 			//Check if the user input $back in quiz 
 			//If yes => back to main menu
-			if (IView.BACK_CODE == view.setAnswers(answers)
-										.setGiven(given)
-										.setCorrectAnswerIndex(resultIndex)
+			if (IView.BACK_CODE == view.setOptions(quiz.getOptionsString())
+										.setGiven(quiz.getGivenString())
+										.setCorrectAnswerIndex(quiz.getAnswerIndex())
 										.getQuizForm().show()) {
 				break;
 			}
 			
 			//Check if ther user answer correctly
-			boolean isCorrect = (Integer)view.getQuizForm().getModel() == resultIndex;
+			boolean isCorrect = (Integer)view.getQuizForm().getModel() == quiz.getAnswerIndex();
 			
 			//Show the final text for correct/incorrect answer
 			view.setCorrectState(isCorrect).show();
