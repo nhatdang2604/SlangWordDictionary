@@ -18,6 +18,7 @@ import com.nhatdang.view.IView;
 import com.nhatdang.view.MenuView;
 import com.nhatdang.view.QuizView;
 import com.nhatdang.view.RandomView;
+import com.nhatdang.view.ResetToDefaultView;
 import com.nhatdang.view.form.QuizForm.QuizType;
 
 //Using enum for singleton pattern
@@ -49,6 +50,7 @@ public enum MainController implements IController {
 						new CreateView(),
 						new EditView(),
 						new DeleteView(),
+						new ResetToDefaultView(),
 						new RandomView(),
 						new QuizView(QuizType.GIVEN_WORD),
 						new QuizView(QuizType.GIVEN_DEFINITION),
@@ -216,7 +218,23 @@ public enum MainController implements IController {
 		//After using edit feature, return to main menu
 		return MAIN_MENU_INDEX;
 	}
+	
+	//Execute to make a quiz game base on type
+	//	Return the index of main menu after execute
+	public int executeResetToDefaultView() {
 		
+		//Load the view
+		ResetToDefaultView view = (ResetToDefaultView)views.get(currentViewId);
+		
+		//Reset the data to default
+		slangWordService.resetToDefaultData();
+		
+		//Pop up the information 
+		view.show();
+		
+		//After using this feature => return to main menu
+		return MAIN_MENU_INDEX;
+	}
 	
 	//Execute to make a random slang word
 	//	Return the index of main menu after execute
@@ -235,7 +253,8 @@ public enum MainController implements IController {
 		return MAIN_MENU_INDEX;
 	}
 	
-
+	//Execute to make a quiz game base on type
+	//	Return the index of main menu after execute
 	private int executeQuizView(QuizType type) {
 		
 		//Load the quiz view
@@ -310,7 +329,7 @@ public enum MainController implements IController {
 			else if (4 == currentViewId) {currentViewId = executeCreateView();}
 			else if (5 == currentViewId) {currentViewId = executeEditView();}
 			else if (6 == currentViewId) {currentViewId = executeDeleteView();}
-			//else if (7 == currentViewId) {currentViewId = executeResetView();}
+			else if (7 == currentViewId) {currentViewId = executeResetToDefaultView();}
 			else if (8 == currentViewId) {currentViewId = executeRandomView();}
 			else if (9 == currentViewId) {currentViewId = executeQuizView(QuizType.GIVEN_WORD);}
 			else if (10 == currentViewId) {currentViewId = executeQuizView(QuizType.GIVEN_DEFINITION);}
