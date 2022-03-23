@@ -34,6 +34,11 @@ public enum SlangWordService implements ISlangWordService {
 		List<SlangWord> result = 
 				slangWordDAO.findSlangWord(word, ISlangWordDAO.FindType.FIND_BY_WORD);
 		
+		//Add the result into history
+		result.forEach(slangWord -> {
+			slangWordDAO.addToHistory(slangWord);
+		});
+		
 		//Return null if there are no result, else return the result
 		return (result.isEmpty()?null:result);
 	}
@@ -46,6 +51,11 @@ public enum SlangWordService implements ISlangWordService {
 		//Get the result list
 		List<SlangWord> result = 
 					slangWordDAO.findSlangWord(keyword, ISlangWordDAO.FindType.FIND_BY_KEYWORD);
+		
+		//Add the result into history
+		result.forEach(slangWord -> {
+			slangWordDAO.addToHistory(slangWord);
+		});
 		
 		//Return null if there are no result, else return the result
 		return (result.isEmpty()?null:result);
@@ -132,6 +142,7 @@ public enum SlangWordService implements ISlangWordService {
 	}
 	
 	//Check if the current cache has the given word from the slang word
+	@Override
 	public boolean isContainWord(String word) {
 		return slangWordDAO.isContainWord(word);
 	}

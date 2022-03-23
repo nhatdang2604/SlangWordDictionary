@@ -48,26 +48,27 @@ public class DeleteView implements IView {
 			//Return to back code if user input $back in the find slang word form
 			if (IView.BACK_CODE == findForm.show()) {return BACK_CODE;}
 		
+			//Get the input word from user
+			String key = findForm.getModel();
+			boolean isSlangWordExisted = !validator.isSlangWordNotExist(key);
+			
+			//If the slang word is not exist => continue the loop to input word again
+			if(!isSlangWordExisted) {continue;}
+			
 			//Try to show the confirmation dialog
 			confirmForm.show();
 			
 			//If the user cancel the confirmation => back to the find form
 			if (!(Boolean)confirmForm.getModel()) {continue;}
 			
-			//Get the input word from user
-			String key = findForm.getModel();
-		
-			//Check if the delete slang word is not existed
-			if (!validator.isSlangWordNotExist(key)) {
-				
-				//Print the successfully reported
-				System.out.println("The slang word has been deleted!");
-				System.out.print("\nPress enter to return to main menu: ");
-				scanner.nextLine();
-				
-				//Break out the loop, if everything is valid
-				break;
-			}
+			//if the delete slang word is existed
+			//	=> Print the successfully reported
+			System.out.println("The slang word has been deleted!");
+			System.out.print("\nPress enter to return to main menu: ");
+			scanner.nextLine();
+			
+			//Break out the loop, if everything is valid
+			break;
 			
 		} 
 

@@ -3,6 +3,7 @@ package com.nhatdang.view.form;
 import java.util.List;
 import java.util.Scanner;
 
+import com.nhatdang.entity.quiz.StringQuiz;
 import com.nhatdang.validator.DataValidator;
 
 public class QuizForm implements IForm {
@@ -21,11 +22,16 @@ public class QuizForm implements IForm {
 	//Model of the form: the answer index
 	private Integer model;
 
+	/*
 	//List of the answers
 	private List<String> options;
 	
 	//The question from the quiz
 	private String given;
+	*/
+	
+	//The hold quiz
+	private StringQuiz quiz;
 	
 	//Validator for checking the answer format
 	private DataValidator validator;
@@ -33,21 +39,21 @@ public class QuizForm implements IForm {
 	//Getters
 	@Override public boolean getBackFlag() {return backFlag;}
 	@Override public Object getModel() {return model;}
-	public List<String> getAnswers() {return options;}
-	public String getGiven() {return given;}
+	public StringQuiz getQuiz() {return quiz;}
+	
 	
 	
 	//Setters
 	@Override public void setBackFlag(boolean value) {backFlag = value;}
 	@Override public void setModel(Object value) {model = (Integer) value;}
-	public QuizForm setOptions(List<String> answer) {this.options = answer; return this;}
-	public QuizForm setGiven(String given) {this.given = given; return this;}
+	public QuizForm setQuiz(StringQuiz quiz) {this.quiz = quiz; return this;}
 	
 	
 	public QuizForm(QuizType type) {
 		this.type = type;
 		backFlag = false;
 		validator = new DataValidator();
+		quiz = new StringQuiz();
 	}
 	
 	
@@ -66,9 +72,10 @@ public class QuizForm implements IForm {
 						(type.equals(QuizType.GIVEN_WORD)?" definition of the given slang word?":
 						type.equals(QuizType.GIVEN_DEFINITION)? " slang word of the given definition?":"");
 		
-		builder.append(question_part1 + given + "\n" + question_part2 + "\n");
+		builder.append(question_part1 + quiz.getGivenString() + "\n" + question_part2 + "\n");
 		
 		//The answers part
+		List<String> options = quiz.getOptionsString();
 		int size = options.size();
 		for (int i = 0; i < size; ++i) {
 			int idx = i + 1;
@@ -110,7 +117,7 @@ public class QuizForm implements IForm {
 			
 			//Else => the input must be integer and in range [1, answers.size()]
 			if (validator.isInteger(buffer)) {
-				if (validator.isIntegerOutOfRange(buffer, 1, options.size())) {
+				if (validator.isIntegerOutOfRange(buffer, 1, quiz.getOptionsString().size())) {
 					
 					//Reduce the selected index by 1 for sync with the index in list
 					model = Integer.parseInt(buffer) - 1;

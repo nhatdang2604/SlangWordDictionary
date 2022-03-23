@@ -38,7 +38,7 @@ public class SlangWordValidator implements IValidator {
 	//Try to check the existance the slang word with the given word
 	public boolean isSlangWordExist(String word) {
 		
-		boolean result = (null != slangWordService.findByWord(word));
+		boolean result = slangWordService.isContainWord(word);
 		if (result) {
 			warningView.setErrorMessage(ERRORS.get(0)).show();
 		}
@@ -49,7 +49,7 @@ public class SlangWordValidator implements IValidator {
 	//Try to check the existance the slang word with the given word
 	public boolean isSlangWordNotExist(String word) {
 		
-		boolean result = (null == slangWordService.findByWord(word));
+		boolean result = (!slangWordService.isContainWord(word));
 		if (result) {
 			warningView.setErrorMessage(ERRORS.get(1)).show();
 		}

@@ -70,8 +70,10 @@ public enum SlangWordDAO implements ISlangWordDAO {
 	}
 	
 	//Utilities for add found slang words into history cache
+	//	Return 1 if the given slang word is null
 	//	Return 0 when success
-	private int addToHistory(SlangWord slangWord) {
+	@Override
+	public int addToHistory(SlangWord slangWord) {
 		
 		//If slang word == null => do nothing and return error code
 		if (null == slangWord) {
@@ -125,7 +127,6 @@ public enum SlangWordDAO implements ISlangWordDAO {
 			
 			//Add to history and add to the result if search hit
 			if (null != foundSlangWord) {
-				addToHistory(foundSlangWord);
 				result.add(foundSlangWord);
 			}
 		} 
@@ -139,10 +140,6 @@ public enum SlangWordDAO implements ISlangWordDAO {
 				}
 			});
 			
-			//Add the found slangwords into cache
-			result.forEach(slangWord ->  {
-				addToHistory(slangWord);
-			});
 		}
 		
 		return result;
@@ -259,14 +256,8 @@ public enum SlangWordDAO implements ISlangWordDAO {
 		//Generate the answer index
 		int answerIndex = rng.nextInt(size);
 		
-		//Generate the given index until given index != answer index
-		int givenIndex = -1;
-		do {
-			givenIndex =  rng.nextInt(size);
-		} while (givenIndex == answerIndex);
-		
 		//Generate the given word/definition
-		SlangWord given = options.get(givenIndex);
+		SlangWord given = options.get(answerIndex);
 		
 		//Return the quiz
 		return new Quiz(answerIndex, options, given);

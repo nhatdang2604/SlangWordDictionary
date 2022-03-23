@@ -129,7 +129,15 @@ public class SlangWordForm implements IForm {
 			//Check if the input contain forbidden word
 			if(!slangWordValidator.isContainInvalidWord(input)) {
 				
-				if (0 == level) {model.setWord(input); break;}
+				
+				
+				if (0 == level) {
+					
+					//Check if the word is exists
+					if(!slangWordValidator.isSlangWordExist(input)) {
+						model.setWord(input); break;
+					}
+				}
 				else if (1 == level) {model.setDefinition(input); break;}
 		
 			}
@@ -167,6 +175,8 @@ public class SlangWordForm implements IForm {
 			
 			//Recreate the Model for the form
 			model = new SlangWord();
+			
+			
 		}
 		
 		for (int level = startLevel; level < size; ++level) {

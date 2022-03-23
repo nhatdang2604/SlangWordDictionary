@@ -147,31 +147,18 @@ public enum MainController implements IController {
 		//Load the create view
 		CreateView view = (CreateView) views.get(currentViewId);
 				
-		//Loop until errorCode == IView.BACK_CODE
-		while (true) {
-			
-			//Show the form to input the slang word data
-			int errorCode = view.getSlangWordForm().show();
-			
-			//Break out the loop condition
-			if (IView.BACK_CODE == errorCode) {break;}
-			
+		//Show the form to input the slang word data
+		int errorCode = view.show();
+		
+		//If no error => add new slang word into file
+		if (IView.NO_ERROR_CODE == errorCode) {
+		
 			//Get the slang word from the input
 			SlangWord model = (SlangWord) view.getSlangWordForm().getModel();
-			
-			//Try to check if the slang word from the model is contained
-			boolean isSlangWordContained = slangWordService.isContainWord(model.getWord());
-			
-			//If the slang word has not been existed => create new one
-			if(!isSlangWordContained) {
-				slangWordService.addSlangWord(model);
-			}
-			
-			//Show up the create result to the screen
-			errorCode = view.setState(isSlangWordContained).show();
-			
-			//Break if the slang word is create successfully
-			if (IView.NO_ERROR_CODE == errorCode) {break;}
+		
+			//Add the slang word to database
+			slangWordService.addSlangWord(model);
+		
 		}
 		
 		//After using create feature, return to main menu
@@ -270,10 +257,9 @@ public enum MainController implements IController {
 		
 			//Check if the user input $back in quiz 
 			//If yes => back to main menu
-			if (IView.BACK_CODE == view.setOptions(quiz.getOptionsString())
-										.setGiven(quiz.getGivenString())
-										.setCorrectAnswerIndex(quiz.getAnswerIndex())
-										.getQuizForm().show()) {
+			if (IView.BACK_CODE == view.setQuiz(quiz)
+										.getQuizForm()
+										.show()) {
 				break;
 			}
 			

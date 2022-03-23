@@ -11,19 +11,8 @@ public class CreateView implements IView {
 	//The form to fill the slangword information
 	private SlangWordForm form;
 	
-	//Check if the submit slang word is existed 
-	private boolean isExisted;
-	
-
 	public CreateView() {
 		form = new SlangWordForm(FormMode.CREATE);
-		isExisted = false;
-	}
-	
-	//Setter for isExisted
-	public IView setState(boolean isExisted) {
-		this.isExisted = isExisted;
-		return this;
 	}
 	
 	//Getter for form
@@ -35,27 +24,22 @@ public class CreateView implements IView {
 	@Override
 	public int showExecute() {
 		
-		//Scanner for input
-		Scanner scanner = new Scanner(System.in);
+		int errorCode = form.show();
 		
-		//Default status is creating successfully
-		String message = "The new slang word has been created!";
-		String instruction = "Press enter to return to main menu!";
-		int errorCode = NO_ERROR_CODE;
+		//Success text when submit successfully
+		if (IView.NO_ERROR_CODE == errorCode) {
+			
+			clearScreen();
+			
+			//Print the message and instruction
+			System.out.println("The new slang word has been created!");
+			System.out.print("Press enter to return to main menu!");
 		
-		//Change the message base on the exitance of the model
-		if(isExisted) {
-			message = "The slang word is already existed!";
-			instruction = "Press enter to return to the form!";
-			errorCode = FAIL_CODE;
+			//For blocking user input
+			Scanner scanner = new Scanner(System.in);
+			scanner.nextLine();	
+		
 		}
-		
-		//Print the message and instruction
-		System.out.println(message);
-		System.out.print(instruction);
-		
-		//For blocking user input
-		scanner.nextLine();	
 		
 		//Return the error code
 		return errorCode;

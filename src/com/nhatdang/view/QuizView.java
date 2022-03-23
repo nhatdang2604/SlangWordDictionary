@@ -3,6 +3,7 @@ package com.nhatdang.view;
 import java.util.List;
 import java.util.Scanner;
 
+import com.nhatdang.entity.quiz.StringQuiz;
 import com.nhatdang.view.form.QuizForm;
 import com.nhatdang.view.form.QuizForm.QuizType;
 
@@ -14,6 +15,7 @@ public class QuizView implements IView {
 	//Form of the quiz
 	private QuizForm quizForm;
 	
+	/*
 	//List of answers for the user
 	private List<String> options;
 	
@@ -22,6 +24,10 @@ public class QuizView implements IView {
 	
 	//The index of the correct answer
 	private int correctAnswerIndex;
+	*/
+	
+	//The hold quiz
+	private StringQuiz quiz;
 	
 	//Check if the asnwer is correct
 	private boolean isCorrect;
@@ -29,23 +35,13 @@ public class QuizView implements IView {
 	public QuizView(QuizType type) {
 		this.type = type;
 		quizForm = new QuizForm(type);
+		quiz = new StringQuiz();
 	}
 	
 	//Setters
-	public QuizView setOptions(List<String> options) {
-		this.options = options;
-		quizForm.setOptions(options);
-		return this;
-	}
-
-	public QuizView setGiven(String given) {
-		this.given = given;
-		quizForm.setGiven(given);
-		return this;
-	}
-
-	public QuizView setCorrectAnswerIndex(int correctAnswerIndex) {
-		this.correctAnswerIndex = correctAnswerIndex;
+	public QuizView setQuiz(StringQuiz quiz) {
+		this.quiz = quiz;
+		quizForm.setQuiz(quiz);
 		return this;
 	}
 	
@@ -67,9 +63,10 @@ public class QuizView implements IView {
 	private String failedText() {
 		
 		//Get the true index
-		int oneIndexingIndex = correctAnswerIndex + 1;
+		int oneIndexingIndex = quiz.getAnswerIndex() + 1;
 		
-		return "Incorrect! The answer is: " + oneIndexingIndex + ") " + options.get(oneIndexingIndex - 1);
+		return "Incorrect! The answer is: " + oneIndexingIndex + ") " 
+				+ quiz.getOptionsString().get(oneIndexingIndex - 1);
 	}
 	
 	@Override

@@ -16,6 +16,11 @@ public interface ISlangWordDAO {
 	//Get all slang words
 	public Map<String, SlangWord> getAllSlangWords();
 	
+	//Utilities for add found slang words into history cache
+	//	Return 1 if the given slang word is null
+	//	Return 0 when success
+	public int addToHistory(SlangWord slangWord);
+	
 	//reset the default slang words
 	//	Return 0 if success
 	public int resetToDefaultSlangWords();
