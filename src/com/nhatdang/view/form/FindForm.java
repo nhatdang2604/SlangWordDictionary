@@ -5,11 +5,15 @@ import java.util.Scanner;
 import com.nhatdang.dao.ISlangWordDAO.FindType;
 import com.nhatdang.validator.DataValidator;
 import com.nhatdang.validator.IValidator;
+import com.nhatdang.view.form.SlangWordForm.FormMode;
 
 public class FindForm implements IForm {
 
 	//Type of finding method
 	private FindType findType;
+	
+	//Type of the form
+	private FormMode formMode;
 	
 	//Flag to check, if the $back is press
 	private boolean backFlag;
@@ -20,12 +24,22 @@ public class FindForm implements IForm {
 	//Validator for input
 	private IValidator validator;
 	
-	public FindForm(FindType findType) {
+	public FindForm(FindType findType, FormMode formMode) {
 		this.findType = findType;
+		this.formMode = formMode;
 		backFlag = false;
 		validator = new DataValidator();
 	}
 
+	//Return header's text of the form
+	private String getHeader() {
+		
+		//header
+		final String header = (null != formMode?formMode.name() + " FINDING FORM\n\n":"");
+		
+		return header;
+	}
+	
 	//Return body's text of the form
 	private String getPlainBody() {
 		
@@ -63,7 +77,8 @@ public class FindForm implements IForm {
 	@Override
 	public String fillForm() {
 		
-		//Print the body of the form
+		//Print the body and header
+		System.out.print(getHeader());
 		System.out.print(getPlainBody());
 		
 		//Get data from user's input

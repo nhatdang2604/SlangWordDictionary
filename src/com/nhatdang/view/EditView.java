@@ -20,13 +20,17 @@ public class EditView implements IView {
 	//Validator for checking if the slang word is existed
 	private SlangWordValidator validator;
 	
+	
 	public EditView() {
 		
+		//form mode for the edit view
+		final FormMode formMode = FormMode.UPDATE;
+		
 		//To edit a slang word => must find by word
-		findForm = new FindForm(FindType.FIND_BY_WORD);
+		findForm = new FindForm(FindType.FIND_BY_WORD, formMode);
 		
 		//The form the hold the edit data
-		dataForm = new SlangWordForm(FormMode.UPDATE);
+		dataForm = new SlangWordForm(formMode);
 		
 		//Validator for checking the existance of the found slang word
 		validator = new SlangWordValidator();

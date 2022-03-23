@@ -3,6 +3,7 @@ package com.nhatdang.view.form;
 import java.util.Scanner;
 
 import com.nhatdang.validator.ConfirmValidator;
+import com.nhatdang.view.IView;
 import com.nhatdang.view.form.SlangWordForm.FormMode;
 
 public class ConfirmForm implements IForm {
@@ -58,6 +59,29 @@ public class ConfirmForm implements IForm {
 		return isConfirmed;
 	}
 
+	//Override this method to exclude the printTips() 
+	@Override
+	public int showExecute() {
+		
+		//print the tips in the header
+		//printTips();		//unused
+		
+		//Fill the form and get the data
+		Object data = fillForm();
+		
+		//If the back flag is got
+		//	=> post processing and set data to null
+		if(getBackFlag()) {
+			executeBeforeBack();
+			data = null;
+		}
+		
+		//	Error code == 0: no error
+		//	Error code == 1: back is pressed
+		int errorCode = (null == data?IView.BACK_CODE:IView.NO_ERROR_CODE);
+		return errorCode;
+	}
+	
 	//Dummy method
 	@Override
 	public boolean getBackFlag() {

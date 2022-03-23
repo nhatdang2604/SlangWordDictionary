@@ -21,14 +21,17 @@ public class DeleteView implements IView {
 	
 	public DeleteView() {
 		
+		//Form mode for the delete view
+		final FormMode formMode = FormMode.DELETE;
+		
 		//To delete a slang word => must find by word
-		findForm = new FindForm(FindType.FIND_BY_WORD);
+		findForm = new FindForm(FindType.FIND_BY_WORD, formMode);
 		
 		//Validator for checking the existance of the delete slang word
 		validator = new SlangWordValidator();
 		
 		//Confirm form for deleting
-		confirmForm = new ConfirmForm(FormMode.DELETE);
+		confirmForm = new ConfirmForm(formMode);
 	}	
 	
 	//Getter for find view
@@ -43,17 +46,22 @@ public class DeleteView implements IView {
 		//Scanner for input
 		Scanner scanner = new Scanner(System.in);
 
+		//Default value for error code
+		int errorCode = NO_ERROR_CODE;
+		
 		while(true) {
 		
 			//Return to back code if user input $back in the find slang word form
-			if (IView.BACK_CODE == findForm.show()) {return BACK_CODE;}
+			if (IView.BACK_CODE == findForm.show()) {
+				errorCode = BACK_CODE; 
+				break;
+			}
 		
 			//Get the input word from user
 			String key = findForm.getModel();
-			boolean isSlangWordExisted = !validator.isSlangWordNotExist(key);
 			
 			//If the slang word is not exist => continue the loop to input word again
-			if(!isSlangWordExisted) {continue;}
+			if(validator.isSlangWordNotExist(key)) {continue;}
 			
 			//Try to show the confirmation dialog
 			confirmForm.show();
@@ -63,6 +71,7 @@ public class DeleteView implements IView {
 			
 			//if the delete slang word is existed
 			//	=> Print the successfully reported
+			clearScreen();
 			System.out.println("The slang word has been deleted!");
 			System.out.print("\nPress enter to return to main menu: ");
 			scanner.nextLine();
@@ -72,7 +81,7 @@ public class DeleteView implements IView {
 			
 		} 
 
-		//Return no error code if the delete process is success
-		return NO_ERROR_CODE;
+		//Return the errorCode
+		return errorCode;
 	}
 }

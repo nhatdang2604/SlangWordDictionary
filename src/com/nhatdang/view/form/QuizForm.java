@@ -21,14 +21,6 @@ public class QuizForm implements IForm {
 		
 	//Model of the form: the answer index
 	private Integer model;
-
-	/*
-	//List of the answers
-	private List<String> options;
-	
-	//The question from the quiz
-	private String given;
-	*/
 	
 	//The hold quiz
 	private StringQuiz quiz;
@@ -40,8 +32,6 @@ public class QuizForm implements IForm {
 	@Override public boolean getBackFlag() {return backFlag;}
 	@Override public Object getModel() {return model;}
 	public StringQuiz getQuiz() {return quiz;}
-	
-	
 	
 	//Setters
 	@Override public void setBackFlag(boolean value) {backFlag = value;}
@@ -72,17 +62,17 @@ public class QuizForm implements IForm {
 						(type.equals(QuizType.GIVEN_WORD)?" definition of the given slang word?":
 						type.equals(QuizType.GIVEN_DEFINITION)? " slang word of the given definition?":"");
 		
-		builder.append(question_part1 + quiz.getGivenString() + "\n" + question_part2 + "\n");
+		builder.append(question_part1 + quiz.getGivenString() + "\n" + question_part2 + "\n\n");
 		
 		//The answers part
 		List<String> options = quiz.getOptionsString();
 		int size = options.size();
 		for (int i = 0; i < size; ++i) {
 			int idx = i + 1;
-			builder.append(idx + ")" + options.get(i) + "\n");
+			builder.append(idx + ") " + options.get(i) + "\n");
 		}
 		
-		builder.append("Give the index of the answer here: ");
+		builder.append("\nGive the index of the answer here: ");
 		
 		return builder.toString();
 	}

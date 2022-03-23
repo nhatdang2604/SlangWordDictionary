@@ -22,7 +22,7 @@ public class FindView implements IView {
 	public FindView(FindType findType) {
 		this.findType = findType;
 		foundSlangWords = null;
-		findForm = new FindForm(this.findType);
+		findForm = new FindForm(this.findType, null);
 	}
 	
 	//Set the answers after finding
